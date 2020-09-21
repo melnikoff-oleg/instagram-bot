@@ -1,0 +1,4 @@
+constants.py
+/users/*.pickle
+/proxyauth_plugin/*.zip
+chromedriver.exe
