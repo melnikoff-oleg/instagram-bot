@@ -28,23 +28,24 @@ def multifarm_iteration(users, types, col):
             ig_bot.password = users[j].password
             ig_bot.login()
             sleep(2)
-            if types[j]:
-                while(users[j].farm_ind < users[j].ff_ind and not users[j].good_stats(users[j].farm_ind)):
-                    users[j].farm_ind += 1
-                if users[j].farm_ind == users[j].ff_ind:
-                    print("FF ENDED, FARM STOPPED ON " + users[j].username)
-                    finished[j] = True
+            for k in range(5):
+                if types[j]:
+                    while(users[j].farm_ind < users[j].ff_ind and not users[j].good_stats(users[j].farm_ind)):
+                        users[j].farm_ind += 1
+                    if users[j].farm_ind == users[j].ff_ind:
+                        print("FF ENDED, FARM STOPPED ON " + users[j].username)
+                        finished[j] = True
+                    else:
+                        ig_bot.natural_subscribe(users[j].most_common[users[j].farm_ind][0])
+                        users[j].used.append(users[j].most_common[users[j].farm_ind][0])
+                        users[j].farm_ind += 1
                 else:
-                    ig_bot.natural_subscribe(users[j].most_common[users[j].farm_ind][0])
-                    users[j].used.append(users[j].most_common[users[j].farm_ind][0])
-                    users[j].farm_ind += 1
-            else:
-                if users[j].temp_bad_guys_ind == len(users[j].temp_bad_guys):
-                    print("BAD GUYS ENDED, ANTIFARM STOPPED ON " + users[j].username)
-                    finished[j] = True
-                else:
-                    ig_bot.natural_unsubscribe(users[j].temp_bad_guys[users[j].temp_bad_guys_ind])
-                    users[j].temp_bad_guys_ind += 1
+                    if users[j].temp_bad_guys_ind == len(users[j].temp_bad_guys):
+                        print("BAD GUYS ENDED, ANTIFARM STOPPED ON " + users[j].username)
+                        finished[j] = True
+                    else:
+                        ig_bot.natural_unsubscribe(users[j].temp_bad_guys[users[j].temp_bad_guys_ind])
+                        users[j].temp_bad_guys_ind += 1
             ig_bot.exit()
             if i < col - 1 or j < n - 1:
                 secs = 10
