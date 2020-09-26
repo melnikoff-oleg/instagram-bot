@@ -82,6 +82,6 @@ class CalculusBot:
 
 
 if __name__ == '__main__':
-    view_bot = CalculusBot(USERNAME, PASSWORD)
-    print(view_bot.followers_list('chlenix_bulbetto'))
+    view_bot = CalculusBot(USERS[0]['username'], USERS[0]['password'])
+    print(view_bot.followers_list('rick_dildelio'))
     print(view_bot.followers('melnikoff_oleg'))

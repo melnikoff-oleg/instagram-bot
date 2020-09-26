@@ -359,27 +359,58 @@ class User():
 
 
 if __name__ == '__main__':
-    username = USERNAME
-    password = PASSWORD
-    print("LOL")
-    """user = User(username, password, [[USERNAME, PASSWORD]], 
-    2, 2000, 150, 700, 100, 10, 0.4, username, password)
-    save_user_to_json(user)"""
 
-    user = get_user_from_json(username)
-    user.get_farm_stats()
-    # #save_user_to_json(user)
-    # print("KEK")
-    # # user.find_people_ind = 0
-    # user.find_people(10)
-    # user.find_people_privates(10)
-    # user.most_common_by_files()
-    # user.ff_ind = 0
-    # user.calc_ff(10)
+
+    users_arr = []
+    for i in USERS:
+        users_arr.append(get_user_from_json(i['username']))
+
+    # for k in range(2):
+    #     for i in users_arr:
+    #         i.find_people(50)
+
+    for i in users_arr:
+        if i.username == 'nazarchansky':
+            continue
+        # i.collect_old_used()
+        # i.most_common_by_files()
+        # print(i.username, i.farm_ind)
+        print(i.username)
+        i.get_farm_stats('2020-09-24')
+        print()
+        print()
+        print()
+
+    for i in users_arr:
+        save_user_to_json(i)
+
+
+
+    # user_id = 1
+    # username = USERS[user_id]['username']
+    # password = USERS[user_id]['password']
+    # print(username, password)
+    # print("LOL")
+    """user = User(username, password, [['kamshot3', 'pizdets6989']], 
+    2, 2100, 150, 700, 120, 5, 0.5, username, password)
+    save_pickle(user)"""
+
+    #user = get_pickle(username)
+    #print("KEK")
+    #user.find_people_ind = 0
+    #user.workers = [['shkur_dolbil', 'Pidor239']]
+    #user.find_people_ind = 0
+    #user.find_people(100)
+    #user.find_people_privates(700)
+    #user.most_common_by_files()
+    #user.ff_ind = 0
+    #user.calc_ff(10)
 
     # print(user.most_common[:40])
+    # print(user.find_people_ind)
     # print(user.ff_ind)
-    # print(user.followers)
+    #print(user.followers)
     # print(len(user.followers))
 
-    save_user_to_json(user)
+    #save_pickle(user)
+    # сделал по 300 на двух

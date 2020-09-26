@@ -117,8 +117,10 @@ def get_driver():
     co.add_argument("--start-maximized")
     co.add_extension(proxyauth_plugin_path)
 
-
-    return webdriver.Chrome(chrome_options=co)
+    if not PROXY == 'http://localhost:8080':
+        return webdriver.Chrome(chrome_options=co)
+    else:
+        return webdriver.Chrome()
 
 class InstagramBot:
     def __init__(self, username, password):
@@ -235,7 +237,7 @@ def save_html(driver):
 
 
 if __name__ == '__main__':
-    ig_bot = InstagramBot(USERNAME, PASSWORD)
+    ig_bot = InstagramBot(USERS[0]['username'], USERS[0]['password'])
     ig_bot.login()
     # sleep(3)
     # try:

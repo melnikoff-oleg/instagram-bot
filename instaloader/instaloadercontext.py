@@ -213,7 +213,8 @@ class InstaloaderContext:
         # pylint:disable=protected-access
         http.client._MAXHEADERS = 200
         session = requests.Session()
-        session.proxies.update(PROXIES)
+        if not PROXY == 'http://localhost:8080':
+            session.proxies.update(PROXIES)
         session.cookies.update({'sessionid': '', 'mid': '', 'ig_pr': '1',
                                 'ig_vw': '1920', 'ig_cb': '1', 'csrftoken': '',
                                 's_network': '', 'ds_user_id': ''})
