@@ -1,4 +1,7 @@
 constants.py
-/users/*.json
-/proxyauth_plugin/*.zip
+/users
+/proxyauth_plugin
+/people_followers
 chromedriver.exe
+/__pycache__
+ff_all.txt

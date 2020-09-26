@@ -37,6 +37,7 @@ def multifarm_iteration(users, types, col):
                     else:
                         ig_bot.natural_subscribe(users[j].most_common[users[j].farm_ind][0])
                         users[j].used.append(users[j].most_common[users[j].farm_ind][0])
+                        users[j].add_new_used(users[j].farm_ind)
                         users[j].farm_ind += 1
                 else:
                     if users[j].temp_bad_guys_ind == len(users[j].temp_bad_guys):
