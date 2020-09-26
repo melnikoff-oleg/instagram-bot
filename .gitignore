@@ -1,4 +1,4 @@
 constants.py
-/users/*.pickle
+/users/*.json
 /proxyauth_plugin/*.zip
 chromedriver.exe

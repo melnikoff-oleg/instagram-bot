@@ -7,25 +7,44 @@ import os
 from threading import Thread
 from datetime import datetime
 import random
-from pickle_handle import *
 from constants import *
+import json
 
 #с pickle есть некоторые проблемы, проще хранить все в JSON дампах, там хотя бы все видно
+
+def get_user_from_json(username):
+    file = open('users/' + username + '.json', 'r')
+    json_user_data = json.load(file)
+    user = User(**json_user_data)
+    return user
+
+def save_user_to_json(user):
+    file = open('users/' + user.username + '.json', 'w')
+    user_as_dict = {'username': user.username, 'password': user.password, 'workers': user.workers, 
+    'farm_gender': user.farm_gender, 'max_followers': user.max_followers, 'min_followers': user.min_followers, 
+    'max_following': user.max_following, 'min_following': user.min_following, 'max_ratio': user.max_ratio, 
+    'min_ratio': user.min_ratio, 'find_people_ind': user.find_people_ind, 
+    'ff_ind': user.ff_ind, 'farm_ind': user.farm_ind, 'used': user.used, 'followers': user.followers, 
+    'good_bad_guys': user.good_bad_guys, 'temp_bad_guys': user.temp_bad_guys, 
+    'temp_bad_guys_ind': user.temp_bad_guys_ind, 'info': user.info, 'most_common': user.most_common}
+    json.dump(user_as_dict, file)
+    file.close()
 
 class User():
 
     def __init__(self, username, password, workers, farm_gender, max_followers, min_followers, max_following, 
-    min_following, max_ratio, min_ratio, username_to_calc, password_to_calc):
+    min_following, max_ratio, min_ratio, username_to_calc='', password_to_calc='', most_common=[], used=[], 
+    good_bad_guys=[], ff_ind=0, find_people_ind=0, farm_ind=0, followers=[], temp_bad_guys=[], 
+    temp_bad_guys_ind=0, info=''):
         self.username = username
         self.password = password
-        self.find_people_ind = 0
-        self.ff_ind = 0
-        self.farm_ind = 0
-        self.used = [username]
-        self.most_common = []
+        self.find_people_ind = find_people_ind
+        self.ff_ind = ff_ind
+        self.farm_ind = farm_ind
+        self.used = used
+        self.most_common = most_common
         self.workers = workers
-        self.followers = []
-        self.temp_ff_all = {}
+        self.followers = followers
         self.max_followers = max_followers
         self.min_followers = min_followers
         self.max_following = max_following
@@ -33,18 +52,22 @@ class User():
         self.max_ratio = max_ratio
         self.min_ratio = min_ratio
         self.farm_gender = farm_gender
-        self.good_bad_guys = []
-        self.temp_bad_guys = []
-        self.temp_bad_guys_ind = 0
-        view_bot = calc_bot.CalculusBot(username_to_calc, password_to_calc)
-        a = view_bot.followers_list(username)
-        b = view_bot.followers(username)
-        c = view_bot.followees(username)
-        self.info = "start " +  str(datetime.date(datetime.now())) + " " + str(b) + " followers " + str(c) + " following"
-        for i in a:
-            self.used.append(i)
-            self.followers.append(i)
-        random.shuffle(self.followers)
+        self.good_bad_guys = good_bad_guys
+        self.temp_bad_guys = temp_bad_guys
+        self.temp_bad_guys_ind = temp_bad_guys_ind
+        self.info = info
+        self.temp_ff_all = {}
+        if len(followers) == 0:
+            view_bot = calc_bot.CalculusBot(username_to_calc, password_to_calc)
+            a = view_bot.followers_list(username)
+            b = view_bot.followers(username)
+            c = view_bot.followees(username)
+            self.info = "start: " +  str(datetime.date(datetime.now())) + ", followers: " + str(b) + ", following:" + str(c)
+            for i in a:
+                self.used.append(i)
+                self.followers.append(i)
+            random.shuffle(self.followers)
+        
 
         
         
@@ -235,7 +258,7 @@ class User():
         a = view_bot.followers_list(self.username)
         b = view_bot.followers(self.username)
         c = view_bot.followees(self.username)
-        self.info += "\nrestart " +  str(datetime.date(datetime.now())) + " " + str(b) + " followers " + str(c) + " following"
+        self.info += "...restart " +  str(datetime.date(datetime.now())) + " " + str(b) + " followers " + str(c) + " following"
         for i in a:
             self.followers.append(i)
         random.shuffle(self.followers)
@@ -265,22 +288,23 @@ if __name__ == '__main__':
     username = USERNAME
     password = PASSWORD
     print("LOL")
-    """user = User(username, password, [['jerry_piskoff', 'Pidor239']], 
+    user = User(username, password, [[USERNAME, PASSWORD]], 
     2, 2000, 150, 700, 100, 10, 0.4, username, password)
-    save_pickle(user)"""
+    save_user_to_json(user)
 
-    """user = get_pickle(username)
+    """user = get_user_from_json(username)
+    save_user_to_json(user)
     print("KEK")
-    user.find_people_ind = 0
-    user.find_people(2)
+    # user.find_people_ind = 0
+    # user.find_people(2)
     # user.find_people_privates(700)
-    user.most_common_by_files()
-    user.ff_ind = 0
-    user.calc_ff(10)
+    # user.most_common_by_files()
+    # user.ff_ind = 0
+    # user.calc_ff(10)
 
     print(user.most_common[:40])
     print(user.ff_ind)
     print(user.followers)
     print(len(user.followers))
 
-    save_pickle(user)"""
+    save_user_to_json(user)"""

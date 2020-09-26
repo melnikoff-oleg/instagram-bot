@@ -5,9 +5,8 @@ from random import randint
 import random
 import farm_types
 import calc_bot
-from user import User
+from user import *
 import calc_bot
-from pickle_handle import *
 from constants import *
 
 def multifarm_iteration(users, types, col):
@@ -28,7 +27,7 @@ def multifarm_iteration(users, types, col):
             ig_bot.password = users[j].password
             ig_bot.login()
             sleep(2)
-            for k in range(5):
+            for k in range(2):
                 if types[j]:
                     while(users[j].farm_ind < users[j].ff_ind and not users[j].good_stats(users[j].farm_ind)):
                         users[j].farm_ind += 1
@@ -54,8 +53,8 @@ def multifarm_iteration(users, types, col):
             else:
                 print("FARM ENDED")
 
-user = get_pickle(USERNAME)
+user = get_user_from_json(USERNAME)
 
 multifarm_iteration([user], [True], 1)
 
-save_pickle(user)
+save_user_to_json(user)
