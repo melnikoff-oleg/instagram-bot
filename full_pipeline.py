@@ -95,7 +95,7 @@ def find_people(username):
         cur_block['followers'].append(follower)
         if people_amount == i + 1:
             cur_block['last_block'] = True
-        if len(cur_block) == followers_block_size or people_amount == i + 1:
+        if len(cur_block['followers']) == followers_block_size or people_amount == i + 1:
             followers_blocks.append(cur_block.copy())
             cur_block['followers'] = []
         if people_amount == i + 1:

@@ -100,6 +100,8 @@ def full_restart(username):
     user['farm_ind'] = 0
     user['most_common'] = []
     user['followers'] = []
+    user['temp_bad_guys'] = []
+    user['temp_bad_guys_ind'] = 0
     view_bot = calc_bot.CalculusBot(username, user['password'])
     a = view_bot.followers_list(username)
     b = view_bot.followers(username)
