@@ -6,3 +6,4 @@ chromedriver.exe
 /__pycache__
 /ff_calc
 /.vscode
+/instaloader/__pycache__
