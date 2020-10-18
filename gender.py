@@ -12,8 +12,8 @@ boy = ['roma', 'roman', 'stepan', 'tima', 'timofey', 'yaroslav', 'ben', 'alex', 
 'dima', 'dimka', 'mr', 'matvey', 'of', 'azat', 'yasha', 'in', 'slavik', 'sanek', 'richard', 'tema', 'vitya', 
 'vano', 'evgeny', 'miroslav', 'yurka', 'yuriy', 'yurij', 'mitya', 'ildar', 'valentin', 'yra', 'volodya', 'rustam', 
 'rodion', 'yung', 'lil', 'dmtry', 'joseph', 'iskander', 'gosha', 'daddy', 'graf', 'miguel', 'boy', 'timka', 
-'zahar', 'zakhar', 'mahmud', 'sanya', 'danya']
-
+'zahar', 'zakhar', 'mahmud', 'sanya', 'danya', 'vania', 'renat']
+ 
 girl = ['lyba', 'ritka', 'katusha', 'olesia', 'olesya', 'evgenia', 'veronica', 'mary', 'valia', 'appolinaria', 
 'anastasia', 'helen', 'vasilisa', 'elena', 'lena', 'lenka', 'julia', 'jenia', 'kristina', 'kris', 'veleria', 
 'elina', 'alina', 'angelina', 'varya', 'nadya', 'vlada', 'anfisa', 'olga', 'olya', 'kseny', 'ksenya', 'xenia', 
@@ -26,8 +26,29 @@ girl = ['lyba', 'ritka', 'katusha', 'olesia', 'olesya', 'evgenia', 'veronica', '
 'lara', 'larisa', 'marina', 'nina', 'oksana', 'sveta', 'svetlana', 'skaya', 'mrs', 'ina', 'girl', 'yulya', 
 'mariya', 'asya', 'alla', 'sonia', 'lena', 'tania', 'sya', 'ochka', 'princess', 'ovna',
 'yana', 'luba', 'shka', 'valya', 'jessica', 'lilia', 'marija', 'marie', 'stasya', 'polisha', 'katrin', 
-'margarit', 'chka', 'yulia', 'nast', 'marusya', 'nika']
+'margarit', 'chka', 'yulia', 'nast', 'marusya', 'nika', 'olechka', 'eliz', 'elis', 'baby']
+ 
+not_human = ['club', 'hse', 'gsom', 'spbu', 'itmo', 'boutique', 'sziu', 'unecon', 'shop']
+ 
+def real_person(name):
+    cropped = ''
+    lst = 'ц'
+    for i in name:
+        if i != lst and i != '.' and i != '_':
+            cropped += i
+        lst = i
+    name = cropped
+    n = len(name)
+    for i in range(n, 1, -1):
+        for j in range(0, n - i + 1):
+            s = name[j : j + i]
+            if s in not_human:
+                return False
+    return True
+ 
 def isGirl(name):
+    if not real_person(name):
+        return False
     cropped = ''
     lst = 'ц'
     for i in name:
@@ -47,8 +68,10 @@ def isGirl(name):
             if s in girl:
                 return True
     return False
-
+ 
 def isBoy(name):
+    if not real_person(name):
+        return False
     cropped = ''
     lst = 'ц'
     for i in name:
@@ -68,10 +91,10 @@ def isBoy(name):
             if s in girl:
                 return False
     return False
-
+ 
 def check(username, type):
     if type == 0:
         return isGirl(username)
     if type == 1:
         return isBoy(username)
-    return True
+    return real_person(username)

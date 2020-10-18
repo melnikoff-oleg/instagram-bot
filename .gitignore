@@ -1,7 +1,8 @@
 /people_followers
-constants.py
+config.py
 /users
 /proxyauth_plugin
 chromedriver.exe
 /__pycache__
-ff_all.txt
+/ff_calc
+/.vscode

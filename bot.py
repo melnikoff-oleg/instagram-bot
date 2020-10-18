@@ -6,7 +6,7 @@ from time import sleep
 import random
 import gender
 import instaloader
-from constants import *
+from config import *
 
 def wait_rand_micro():
     sleep(random.randint(2, 7))
@@ -21,7 +21,7 @@ def wait_rand_long():
     sleep(random.randint(1800, 3600))
 
 
-def get_driver():
+def get_driver(proxy):
     def create_proxyauth_extension(proxy_host, proxy_port,
                                 proxy_username, proxy_password,
                                 scheme='http', plugin_path=None):
@@ -105,27 +105,41 @@ def get_driver():
         return plugin_path
 
     proxyauth_plugin_path = create_proxyauth_extension(
-        proxy_host=PROXY_DICT['host'],
-        proxy_port=PROXY_DICT['port'],
-        proxy_username=PROXY_DICT['username'],
-        proxy_password=PROXY_DICT['password']
+        proxy_host=proxy['host'],
+        proxy_port=proxy['port'],
+        proxy_username=proxy['username'],
+        proxy_password=proxy['password']
     )
 
 
     co = Options()
-    #co.add_argument("--headless")
-    co.add_argument("--start-maximized")
-    co.add_extension(proxyauth_plugin_path)
+    co.add_argument('--user-agent="{}"'.format(USER_AGENT))
+    if VPS:
+        co.add_argument('--no-sandbox')
+    if VPS or USE_PROXY:
+        co.add_argument("--start-maximized")
+        co.add_extension(proxyauth_plugin_path)
+    if HEADLESS and not VPS:
+        co.add_argument("--headless")
 
+    if VPS:
+        driver = webdriver.Chrome(executable_path="./drivers/chromedriver", options=co)
+    else:
+        driver = webdriver.Chrome(chrome_options=co)
 
-    return webdriver.Chrome(chrome_options=co)
+    return driver
 
 class InstagramBot:
-    def __init__(self, username, password):
+    def __init__(self, username, password, proxy=''):
         self.username = username
         self.password = password
         self.base_url = 'https://www.instagram.com'
-        self.driver = get_driver()
+        self.driver = get_driver(proxy)
+        self.driver.get('https://httpbin.org/ip')
+        sleep(3)
+        html = self.driver.page_source
+        ip = html.split('"')[-2]
+        print('New Instagram Bot created with proxy IP {}'.format(ip))
 
     
     def login(self):
@@ -180,10 +194,10 @@ class InstagramBot:
     def natural_subscribe(self, username):
         try:
             self.nav_user(username)
-            sleep(3)
+            sleep(5)
             try:
                 self.driver.find_element_by_css_selector("#react-root > section > main > div > div._2z6nI > article > div > div > div:nth-child(1) > div:nth-child(1)").click()
-                sleep(3)
+                sleep(5)
                 self.driver.find_element_by_css_selector('svg._8-yf5[aria-label="Нравится"]').click()
                 sleep(3)
             except Exception as e:
@@ -235,11 +249,13 @@ def save_html(driver):
 
 
 if __name__ == '__main__':
-    ig_bot = InstagramBot(USERNAME, PASSWORD)
-    ig_bot.login()
+    pass
+    # ig_bot = InstagramBot(TEST_USERNAME, TEST_PASSWORD, DEFAULT_PROXY)
+    # ig_bot.login()
     # sleep(3)
     # try:
-    #     ig_bot.natural_subscribe('gromix.x')
+    #     ig_bot.natural_subscribe('editprior')
     # except Exception as e:
     #     print(e)
+    # ig_bot.exit()
     # ig_bot.driver.close()

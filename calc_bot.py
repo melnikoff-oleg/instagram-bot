@@ -1,10 +1,10 @@
 import instaloader
-from constants import *
+from config import *
 
 class CalculusBot:
-    def __init__(self, username = 'rick_dildelio', password = 'Pidor239'):
+    def __init__(self, username = 'rick_dildelio', password = 'Pidor239', proxy=''):
         self.L = instaloader.Instaloader()
-        self.L.login(username, password)
+        self.L.login(username, password, proxy)
     
     def followers(self, username):
         profile = instaloader.Profile.from_username(self.L.context, username)
@@ -82,6 +82,7 @@ class CalculusBot:
 
 
 if __name__ == '__main__':
-    view_bot = CalculusBot(USERNAME, PASSWORD)
-    print(view_bot.followers_list('chlenix_bulbetto'))
-    print(view_bot.followers('melnikoff_oleg'))
+    pass
+    # view_bot = CalculusBot(TEST_USERNAME, TEST_PASSWORD)
+    # print(view_bot.followers_list('chlenix_bulbetto'))
+    # print(view_bot.followers('melnikoff_oleg'))

@@ -21,12 +21,9 @@ from .exceptions import *
 
 import sys 
 sys.path.append('..')
-from constants import *
+from config import *
 
-PROXIES = {
-    'http': PROXY,
-    'https': PROXY
-}
+
 
 
 def copy_session(session: requests.Session, request_timeout: Optional[float] = None) -> requests.Session:
@@ -44,7 +41,7 @@ def copy_session(session: requests.Session, request_timeout: Optional[float] = N
 def default_user_agent() -> str:
     # return 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 ' \
     #        '(KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36'
-    return 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148'
+    return USER_AGENT
 
 
 
@@ -200,7 +197,7 @@ class InstaloaderContext:
         data = self.graphql_query("d6f4427fbe92d846298cf93df0b937d3", {})
         return data["data"]["user"]["username"] if data["data"]["user"] is not None else None
 
-    def login(self, user, passwd):
+    def login(self, user, passwd, proxy):
         """Not meant to be used directly, use :meth:`Instaloader.login`.
 
         :raises InvalidArgumentException: If the provided username does not exist.
@@ -213,12 +210,20 @@ class InstaloaderContext:
         # pylint:disable=protected-access
         http.client._MAXHEADERS = 200
         session = requests.Session()
-        session.proxies.update(PROXIES)
+        if VPS or USE_PROXY:
+            proxy_str = 'http://{}:{}@{}:{}'.format(proxy['username'], proxy['password'], proxy['host'], proxy['port'])
+            PROXIES = {
+                'http': proxy_str,
+                'https': proxy_str
+            }
+            session.proxies.update(PROXIES)
         session.cookies.update({'sessionid': '', 'mid': '', 'ig_pr': '1',
                                 'ig_vw': '1920', 'ig_cb': '1', 'csrftoken': '',
                                 's_network': '', 'ds_user_id': ''})
         session.headers.update(self._default_http_header())
-        print(session.get('https://httpbin.org/ip').text)
+        ip = session.get('https://httpbin.org/ip').text
+        ip = ip.split('"')[3]
+        print('New Instaloader login by user {} from IP {}'.format(user.upper(), ip.upper()))
         if self.request_timeout is not None:
             # Override default timeout behavior.
             # Need to silence mypy bug for this. See: https://github.com/python/mypy/issues/2427
