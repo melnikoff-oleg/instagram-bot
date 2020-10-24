@@ -15,8 +15,7 @@ chromedriver
 config.py
 
 
-git commands:
-
+GIT COMMANDS:
 git --version
 git config --global user.name melnikoff_oleg ENTER
 git config --global user.email oleghools@gmail.com

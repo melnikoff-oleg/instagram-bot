@@ -28,7 +28,7 @@ girl = ['lyba', 'ritka', 'katusha', 'olesia', 'olesya', 'evgenia', 'veronica', '
 'yana', 'luba', 'shka', 'valya', 'jessica', 'lilia', 'marija', 'marie', 'stasya', 'polisha', 'katrin', 
 'margarit', 'chka', 'yulia', 'nast', 'marusya', 'nika', 'olechka', 'eliz', 'elis', 'baby']
  
-not_human = ['club', 'hse', 'gsom', 'spbu', 'itmo', 'boutique', 'sziu', 'unecon', 'shop']
+not_human = ['club', 'hse', 'gsom', 'spbu', 'itmo', 'boutique', 'sziu', 'unecon', 'shop', 'hookah', 'spbgasu']
  
 def real_person(name):
     cropped = ''

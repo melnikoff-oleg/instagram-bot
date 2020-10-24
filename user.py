@@ -31,8 +31,9 @@ def save_user_to_json(user):
 def add_old_used(username, used_username):
     user = get_user_from_json(username)
     user['full_used'].append({'username': used_username, 'common': 4, 'followers': 300, 'following': 300,
-    'date': str(datetime.date(2020, 1, 1)), 'farmed': False})
+    'date': str(date(2020, 1, 1)), 'farmed': False})
     save_user_to_json(user)
+    print(len(user['full_used']))
 
 def add_new_used(username, new_used_user, common=4, followers=300, following=300):
     user = get_user_from_json(username)
@@ -114,12 +115,15 @@ def full_restart(username):
     random.shuffle(user['followers'])
     save_user_to_json(user)
 
-def get_farm_stats(username, date_start='2000-01-01', date_end=str(datetime.date(datetime.now())), recalc=False):
+def get_farm_stats(username, date_start='2000-01-01', date_end=str(datetime.date(datetime.now())), recalc=False, username_to_calc='', password_to_calc='', proxy=DEFAULT_PROXY):
     user = get_user_from_json(username)
+    if username_to_calc == '':
+        username_to_calc = username
+        password_to_calc = user['password']
     date_start = str_to_date(date_start)
     date_end = str_to_date(date_end)
     if recalc:
-        view_bot = calc_bot.CalculusBot(username, user['password'])
+        view_bot = calc_bot.CalculusBot(username_to_calc, password_to_calc, proxy)
         user['followers'] = view_bot.followers_list(username)
     for i in user['full_used']:
         if i['username'] in user['followers']:
@@ -173,6 +177,10 @@ def get_farm_stats(username, date_start='2000-01-01', date_end=str(datetime.date
         print('Farmed:', 'girls part -', str(girls) + '%', '  boys part -', str(boys) + '%')
 
 if __name__ == '__main__':
-    pass
+    # pass
+
+    # add_blacklist('bugabrows', ['danilkorolkov'])
+
+    get_farm_stats('bugabrows', '2020-10-19', username_to_calc='boris_nikitin_johnson', password_to_calc='jfn3FF3jd', recalc=True, proxy={'host': '193.187.146.145', 'port': 8000, 'username': 'TMBmYc', 'password': 'Za5u2k'})
     # full_restart('melnikoff_oleg')
     # full_restart('nazarchansky')

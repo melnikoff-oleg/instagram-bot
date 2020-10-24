@@ -271,8 +271,10 @@ def process_calc_people_block(instaloader_session, block, nomad_name):
     length = min(len(block['followers']), 2)
     print('Here you can check beginning of this block {}'.format(block['followers'][:length]))
     temp_ff_all = get_ff_all()
+    ttl_new = 0
     for cur_ind, cur in enumerate(block['followers']):
         if not cur[0] in temp_ff_all:
+            ttl_new += 1
             try:
                 follower = cur[0]
                 profile = instaloader.Profile.from_username(instaloader_session.context, follower)
@@ -287,7 +289,7 @@ def process_calc_people_block(instaloader_session, block, nomad_name):
     print('Nomad ' + nomad_name + ' finished current block for ' + block['username'] + ' user')
     if block['last_block']:
         finish_calc_people(block['username'], nomad_name)
-    sleep_time = NOMAD_SLEEP_TIME[DEBUG]
+    sleep_time = round(NOMAD_SLEEP_TIME[DEBUG] * (ttl_new / len(block['followers'])))
     print("Nomad {} sleeping for {} secs after block calculation".format(nomad_name, sleep_time))
     #sleep(600)
     sleep(sleep_time)
@@ -371,6 +373,11 @@ def one_loop_paladin_process(paladin_id, ig_bot):
     operations = client['operations']
     username = client['username']
     cur_operation = operations.pop(0)
+    if cur_operation == [-1, -1]:
+        client['finding_bad'] = True
+        find_bad(username)
+        client['finding_bad'] = False
+    cur_operation = operations.pop(0)
 
     
 
@@ -384,16 +391,6 @@ def one_loop_paladin_process(paladin_id, ig_bot):
         print('Finally finished farm on {client_name} !!!'.format(client_name=username))
         json_farm_data.pop(argmin)
         
-    if DEBUG:
-        if operations_len <= 2 and operations_len > 1:
-            client['finding_bad'] = True
-            find_bad(username)
-            client['finding_bad'] = False
-    else:
-        if operations_len % 5 == 0 and operations_len <= 80 and operations_len > 0:
-            client['finding_bad'] = True
-            find_bad(username)
-            client['finding_bad'] = False
 
     
     with open('paladins/farm_instance_{}.json'.format(paladin_id), 'w') as file:
@@ -433,7 +430,8 @@ def process_one_farm_operation(ig_bot, username, operation):
             ig_bot.natural_unsubscribe(user['temp_bad_guys'][user['temp_bad_guys_ind']])
             user['temp_bad_guys_ind'] += 1
     save_user_to_json(user)
-    ig_bot.exit()
+    if not ONE_USER:
+        ig_bot.exit()
 
 
 def find_bad(username):
@@ -459,6 +457,15 @@ if __name__ == '__main__':
     # password = TEST_PASSWORD
 
     # create_user_json(username, password)
+
+    # find_people('bugabrows')
+    # finish_find_people('bugabrows')
+    # finish_calc_people('bugabrows', 'nomad_name')
+
+    # user = get_user_from_json('bugabrows')
+    # ans = []
+    # for i in range(200):
+    #     print(user['most_common'][i][0])
 
     # find_people('melnikoff_oleg')
     # find_people('nazarchansky')

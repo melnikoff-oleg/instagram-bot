@@ -152,6 +152,7 @@ class InstagramBot:
             sleep(3)
         except Exception as e:
             print(e)
+        sleep(10)
 
     def exit(self):
         self.driver.get(self.base_url + '/' + self.username)
@@ -195,9 +196,18 @@ class InstagramBot:
         try:
             self.nav_user(username)
             sleep(5)
-            try:
-                self.driver.find_element_by_css_selector("#react-root > section > main > div > div._2z6nI > article > div > div > div:nth-child(1) > div:nth-child(1)").click()
-                sleep(5)
+            try: 
+                # self.driver.find_element_by_css_selector("#react-root > section > main > div > div._2z6nI > article > div > div > div:nth-child(1) > div:nth-child(1)").click()
+                # sleep(3)
+                #react-root > section > main > div > div._2z6nI > article > div:nth-child(1) > div > div:nth-child(1) > div:nth-child(1) > a
+                html = self.driver.page_source
+                # print(html)
+                a = html.split('<a href="/p/')[1].split('/')[0]
+                #print(a)
+                self.driver.get(self.base_url + '/p/' + a)
+                sleep(3)
+                self.driver.execute_script("window.scrollTo(0, 500)")
+                sleep(2)
                 self.driver.find_element_by_css_selector('svg._8-yf5[aria-label="Нравится"]').click()
                 sleep(3)
             except Exception as e:
@@ -249,13 +259,11 @@ def save_html(driver):
 
 
 if __name__ == '__main__':
-    pass
-    # ig_bot = InstagramBot(TEST_USERNAME, TEST_PASSWORD, DEFAULT_PROXY)
-    # ig_bot.login()
-    # sleep(3)
-    # try:
-    #     ig_bot.natural_subscribe('editprior')
-    # except Exception as e:
-    #     print(e)
-    # ig_bot.exit()
-    # ig_bot.driver.close()
+    ig_bot = InstagramBotTEST_USERNAME, TEST_PASSWORD,  TEST_PROXY)
+    ig_bot.login()
+    try:
+        ig_bot.natural_subscribe('livewiretes')
+    except Exception as e:
+        print(e)
+    ig_bot.exit()
+    ig_bot.driver.close()

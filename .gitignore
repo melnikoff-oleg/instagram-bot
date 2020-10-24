@@ -7,3 +7,7 @@ chromedriver.exe
 /ff_calc
 /.vscode
 /instaloader/__pycache__
+/ruins
+/nomads
+/paladins
+/debug.log
