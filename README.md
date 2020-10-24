@@ -42,4 +42,7 @@ git push -u origin master/admin
 add commit git push -u origin master 
 git clone url при этом гит инит уже не нужен
 git pull
-git rm --cached 
+git rm --cached
+to clean modified files and get last version from remote repo
+git reset --hard origin/master 
+git pull
