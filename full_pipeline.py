@@ -200,7 +200,6 @@ def finish_find_people(username):
 
 
 
-
 def add_calc_people_blocks(followers_blocks):
     with open('nomads/calc_people_blocks.json', 'r') as file:
         json_blocks_data = json.load(file)
@@ -333,7 +332,7 @@ def push_client_in_farm(username):
     operations = start + mid + end
     if DEBUG:
         operations = [[1, 0], [1, 1], [0, 1]]
-    client_pack = {'username': username, 'operations': operations, 'finding_bad': False, 'last_operation': int(time.time())}
+    client_pack = {'username': username, 'operations': operations, 'last_operation': int(time.time())}
     push_json_client_in_farm(client_pack)
 
 def push_json_client_in_farm(client_pack):
@@ -358,7 +357,7 @@ def one_loop_paladin_process(paladin_id, ig_bot):
     argmin = -1
     min_time_last_operation = 1000000000000000
     for ind, client in enumerate(json_farm_data):
-        if not client['finding_bad'] and client['last_operation'] < min_time_last_operation:
+        if client['last_operation'] < min_time_last_operation:
             argmin = ind
             min_time_last_operation = client['last_operation']
 
@@ -374,10 +373,8 @@ def one_loop_paladin_process(paladin_id, ig_bot):
     username = client['username']
     cur_operation = operations.pop(0)
     if cur_operation == [-1, -1]:
-        client['finding_bad'] = True
         find_bad(username)
-        client['finding_bad'] = False
-    cur_operation = operations.pop(0)
+        cur_operation = operations.pop(0)
 
     
 
@@ -458,11 +455,11 @@ if __name__ == '__main__':
 
     # create_user_json(username, password)
 
-    # find_people('bugabrows')
-    # finish_find_people('bugabrows')
-    # finish_calc_people('bugabrows', 'nomad_name')
+    # find_people(username)
+    # finish_find_people(username)
+    # finish_calc_people(username, password)
 
-    # user = get_user_from_json('bugabrows')
+    # user = get_user_from_json(username)
     # ans = []
     # for i in range(200):
     #     print(user['most_common'][i][0])
