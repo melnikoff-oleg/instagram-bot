@@ -8,18 +8,6 @@ import gender
 import instaloader
 from config import *
 
-def wait_rand_micro():
-    sleep(random.randint(2, 7))
-
-def wait_rand_short():
-    sleep(random.randint(5, 30))
-
-def wait_rand_mid():
-    sleep(random.randint(300, 600))
-
-def wait_rand_long():
-    sleep(random.randint(1800, 3600))
-
 
 def get_driver(proxy):
     def create_proxyauth_extension(proxy_host, proxy_port,
@@ -152,18 +140,21 @@ class InstagramBot:
             sleep(3)
         except Exception as e:
             print(e)
-        sleep(10)
 
     def exit(self):
         self.driver.get(self.base_url + '/' + self.username)
         sleep(3)
         try:
-            settings_btn = self.driver.find_element_by_xpath('//*[@id="react-root"]/section/main/div/header/section/div[1]/div/button')
-            settings_btn.click()
+            self.driver.find_element_by_css_selector('svg._8-yf5[aria-label="Параметры"]').click()
             sleep(3)
-            self.driver.find_elements_by_xpath("//button[contains(text(), 'Выйти')]")[0].click()
+            exit_button = self.driver.find_element_by_xpath("//div[contains(text(), 'Выйти')]")
+            from selenium.webdriver.common.action_chains import ActionChains
+            actions = ActionChains(self.driver)
+            actions.move_to_element(exit_button).perform()
             sleep(3)
-            self.driver.find_elements_by_xpath("//button[contains(text(), 'Выйти')]")[0].click()
+            exit_button.click()
+            sleep(3)
+            self.driver.find_element_by_xpath("//button[contains(text(), 'Выйти')]").click()
             sleep(3)
         except Exception as e:
             print(e)
@@ -197,13 +188,8 @@ class InstagramBot:
             self.nav_user(username)
             sleep(5)
             try: 
-                # self.driver.find_element_by_css_selector("#react-root > section > main > div > div._2z6nI > article > div > div > div:nth-child(1) > div:nth-child(1)").click()
-                # sleep(3)
-                #react-root > section > main > div > div._2z6nI > article > div:nth-child(1) > div > div:nth-child(1) > div:nth-child(1) > a
                 html = self.driver.page_source
-                # print(html)
                 a = html.split('<a href="/p/')[1].split('/')[0]
-                #print(a)
                 self.driver.get(self.base_url + '/p/' + a)
                 sleep(3)
                 self.driver.execute_script("window.scrollTo(0, 500)")
@@ -259,11 +245,7 @@ def save_html(driver):
 
 
 if __name__ == '__main__':
-    ig_bot = InstagramBotTEST_USERNAME, TEST_PASSWORD,  TEST_PROXY)
+    ig_bot = InstagramBot(TEST_USERNAME, TEST_PASSWORD,  TEST_PROXY)
     ig_bot.login()
-    try:
-        ig_bot.natural_subscribe('livewiretes')
-    except Exception as e:
-        print(e)
     ig_bot.exit()
     ig_bot.driver.close()
