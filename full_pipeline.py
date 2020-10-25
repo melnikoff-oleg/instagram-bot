@@ -442,7 +442,7 @@ def find_bad(username):
             real_bad.append(i)
     real_bad.reverse()
     user['temp_bad_guys'] = real_bad
-    print("BAD GUYS OF " + username + " ARE:")
+    print('{} has {} bad guys:'.format(username, len(real_bad)))
     print(real_bad)
     user['temp_bad_guys_ind'] = 0
     save_user_to_json(user)
