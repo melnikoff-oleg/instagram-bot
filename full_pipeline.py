@@ -379,7 +379,7 @@ def one_loop_paladin_process(paladin_id, ig_bot):
     
 
     process_one_farm_operation(ig_bot, username, cur_operation)
-    client['last_operations'] = int(time.time())
+    client['last_operation'] = int(time.time())
     operations_len = len(operations)
     if operations_len == 0:
         print('YEEEEEEEZZZZZZZZZZ')

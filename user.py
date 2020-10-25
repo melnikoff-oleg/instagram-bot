@@ -177,10 +177,11 @@ def get_farm_stats(username, date_start='2000-01-01', date_end=str(datetime.date
         print('Farmed:', 'girls part -', str(girls) + '%', '  boys part -', str(boys) + '%')
 
 if __name__ == '__main__':
-    # pass
+    pass
 
     # add_blacklist('bugabrows', ['danilkorolkov'])
 
-    get_farm_stats('bugabrows', '2020-10-19', username_to_calc='boris_nikitin_johnson', password_to_calc='jfn3FF3jd', recalc=True, proxy={'host': '193.187.146.145', 'port': 8000, 'username': 'TMBmYc', 'password': 'Za5u2k'})
+    # get_farm_stats('bugabrows', '2020-10-19', username_to_calc='boris_nikitin_johnson', password_to_calc='jfn3FF3jd', recalc=True, proxy={'host': '193.187.146.145', 'port': 8000, 'username': 'TMBmYc', 'password': 'Za5u2k'})
+    # add_good_bad_guys('nazarchansky', ['annuuuua_2', 'rudakoval', 'matnamate.space'])
     # full_restart('melnikoff_oleg')
     # full_restart('nazarchansky')
