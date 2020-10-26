@@ -82,5 +82,6 @@ class CalculusBot:
 
 
 if __name__ == '__main__':
-    view_bot = CalculusBot(TEST_USERNAME, TEST_PASSWORD, {'host': '37.1.221.45', 'port': 18625, 'username': 'oleghools', 'password': 'ac04abb0'})
-    print(view_bot.bad_guys('bugabrows'))
+    view_bot = CalculusBot('smithjohnsn_535789', 'Sana1234', {'host': '213.226.76.15', 'port': 8000, 'username': 'XCwv2g', 'password': 'pv2mhP'})
+    print(view_bot.followees('petrov__vova'))
+    print(view_bot.followers_list('chlenix_bulbetto'))

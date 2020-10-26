@@ -181,7 +181,7 @@ if __name__ == '__main__':
 
     # add_blacklist('bugabrows', ['danilkorolkov'])
 
-    # get_farm_stats('bugabrows', '2020-10-19', username_to_calc='boris_nikitin_johnson', password_to_calc='jfn3FF3jd', recalc=True, proxy={'host': '193.187.146.145', 'port': 8000, 'username': 'TMBmYc', 'password': 'Za5u2k'})
+    # get_farm_stats('bugabrows', '2020-10-19', username_to_calc='', password_to_calc='', recalc=True, proxy={'host': '193.187.146.145', 'port': 8000, 'username': 'TMBmYc', 'password': 'Za5u2k'})
     # add_good_bad_guys('nazarchansky', ['annuuuua_2', 'rudakoval', 'matnamate.space'])
     # full_restart('melnikoff_oleg')
     # full_restart('nazarchansky')

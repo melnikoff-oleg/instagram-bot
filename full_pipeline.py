@@ -30,7 +30,10 @@ def get_best_paladin():
         number = int(number.split('.')[0])
         return number
 
-def create_user_json(username, password, farm_gender=2, max_followers=2000, min_followers=150, max_following=700, min_following=100, max_ratio=5, min_ratio=0.5, good_bad_guys=[]):
+def create_user_json(username, password, farm_gender=2, max_followers=2000, min_followers=150, max_following=700, min_following=100, max_ratio=5, min_ratio=0.5, good_bad_guys=[], username_to_calc='', password_to_calc='', proxy_to_calc=''):
+    if username_to_calc == '':
+        username_to_calc = username
+        password_to_calc = password
     most_common = []
     full_used = []
     ff_ind = 0
@@ -41,9 +44,10 @@ def create_user_json(username, password, farm_gender=2, max_followers=2000, min_
     temp_bad_guys_ind = 0
     info = ''
     paladin_id = get_best_paladin()
-    proxy = PALADINS[paladin_id]['proxy']
+    if proxy_to_calc == '':
+        proxy_to_calc = PALADINS[paladin_id]['proxy']
 
-    view_bot = calc_bot.CalculusBot(username, password, proxy)
+    view_bot = calc_bot.CalculusBot(username_to_calc, password_to_calc, proxy_to_calc)
     followers = view_bot.followers_list(username)
     followers_amount = view_bot.followers(username)
     followees_amount = view_bot.followees(username)
@@ -62,7 +66,6 @@ def create_user_json(username, password, farm_gender=2, max_followers=2000, min_
         json.dump(user_as_dict, file)
         print('New client {} has been created!!!'.format(username))
     find_people(username)
-
 
 def get_user_from_json(username):
     json_user_data = {}
@@ -124,6 +127,7 @@ def get_find_people_block(ruin_name):
 
 
 def process_find_people_block(instaloader_session, block, ruin_name):
+    ttl_new = 0
     for cur_ind, follower in enumerate(block['followers']):
         try:
             with open("people_followers/" + follower + ".txt", 'r') as file:
@@ -147,9 +151,12 @@ def process_find_people_block(instaloader_session, block, ruin_name):
                     cur_file.close()
                     print(follower + " collected by " +
                             ruin_name + " it's " + str(cur_ind) + "/" + str(len(block['followers'])) + ' in current block for ' + block['username'] + 'user')
+                    ttl_new += 1
                 else:
                     print("private " + follower + " was not collected by " +
                             ruin_name + " it's " + str(cur_ind) + "/" + str(len(block['followers'])) + ' in current block for ' + block['username'] + 'user')
+            else:
+                print('We will not calc followers of {} because he has more than 1100 followers, while finding people for {} client'.format(follower, block['username']))
         except instaloader.exceptions.ProfileNotExistsException:
             print("Oops!  " + str(follower) + " Not founded")
         except Exception as e:
@@ -159,7 +166,7 @@ def process_find_people_block(instaloader_session, block, ruin_name):
     print('Ruin {} finished current block for {} user'.format(ruin_name, block['username']))
     if block['last_block']:
         finish_find_people(block['username'])
-    sleep_time = RUIN_SLEEP_TIME[DEBUG]
+    sleep_time = RUIN_SLEEP_TIME[DEBUG] * (ttl_new / len(block['followers']))
     print('Ruin {} sleeping for {} secs after block calculation'.format(ruin_name, sleep_time))
     sleep(sleep_time)
 
@@ -290,7 +297,6 @@ def process_calc_people_block(instaloader_session, block, nomad_name):
         finish_calc_people(block['username'], nomad_name)
     sleep_time = round(NOMAD_SLEEP_TIME[DEBUG] * (ttl_new / len(block['followers'])))
     print("Nomad {} sleeping for {} secs after block calculation".format(nomad_name, sleep_time))
-    #sleep(600)
     sleep(sleep_time)
 
 def good_stats(followers, following, max_followers=2000, min_followers=150, max_following=700, min_following=100, max_ratio=5, min_ratio=0.5):
@@ -473,8 +479,6 @@ if __name__ == '__main__':
     pass
     # username = TEST_USERNAME
     # password = TEST_PASSWORD
-
-    # create_user_json(username, password)
 
     # find_people(username)
     # finish_find_people(username)
