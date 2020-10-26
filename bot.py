@@ -243,9 +243,20 @@ def save_html(driver):
     with open('html_source_code.html', 'w', errors='ignore') as f:
         f.write(source_code)
 
+def check_keywords(html, keywords):
+    html = html.lower()
+    for word in keywords:
+        word = word.lower()
+        if word in html:
+            return True
+    return False
+
+
 
 if __name__ == '__main__':
-    ig_bot = InstagramBot(TEST_USERNAME, TEST_PASSWORD,  TEST_PROXY)
-    ig_bot.login()
-    ig_bot.exit()
-    ig_bot.driver.close()
+    pass
+    # ig_bot = InstagramBot(TEST_USERNAME, TEST_PASSWORD,  TEST_PROXY)
+    # ig_bot.login()
+    # ig_bot.nav_user('melnikoff_oleg')
+    # ig_bot.exit()
+    # ig_bot.driver.close()

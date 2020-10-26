@@ -355,7 +355,7 @@ def one_loop_paladin_process(paladin_id, ig_bot):
     with open('paladins/farm_instance_{}.json'.format(paladin_id), 'r') as file:
         json_farm_data = json.load(file)
     argmin = -1
-    min_time_last_operation = 1000000000000000
+    min_time_last_operation = int(time.time())
     for ind, client in enumerate(json_farm_data):
         if client['last_operation'] < min_time_last_operation:
             argmin = ind
@@ -378,8 +378,12 @@ def one_loop_paladin_process(paladin_id, ig_bot):
 
     
 
-    process_one_farm_operation(ig_bot, username, cur_operation)
-    client['last_operation'] = int(time.time())
+    if not process_one_farm_operation(ig_bot, username, cur_operation):
+        client['last_operation'] = int(time.time()) + CLIENT_SLEEP_AFTER_BLOCKING
+        print('FUCKING SHIT CLIENT {} BLOCKED:)'.format(username))
+        print('Now we will set last_operation time on client {} to current time + {} secs'.format(username, CLIENT_SLEEP_AFTER_BLOCKING))
+    else:
+        client['last_operation'] = int(time.time())
     operations_len = len(operations)
     if operations_len == 0:
         print('YEEEEEEEZZZZZZZZZZ')
@@ -389,7 +393,6 @@ def one_loop_paladin_process(paladin_id, ig_bot):
         json_farm_data.pop(argmin)
         
 
-    
     with open('paladins/farm_instance_{}.json'.format(paladin_id), 'w') as file:
         json.dump(json_farm_data, file)
     
@@ -399,7 +402,16 @@ def one_loop_paladin_process(paladin_id, ig_bot):
         sleep_secs /= len(json_farm_data)
     print('Paladin {paladin_id} finished 1 farm iteration on client {username} and now will sleep for {secs} secs'.format(username=username, paladin_id=paladin_id, secs=sleep_secs))
     sleep(sleep_secs)
-    
+
+def check_keywords(html, keywords):
+    html = html.lower()
+    for word in keywords:
+        word = word.lower()
+        if word in html:
+            return True
+    return False
+
+
     
 def process_one_farm_operation(ig_bot, username, operation):
     user = get_user_from_json(username)
@@ -418,6 +430,10 @@ def process_one_farm_operation(ig_bot, username, operation):
             ig_bot.natural_subscribe(cur_farming[0])
             user['full_used'].append({'username':cur_farming[0], 'common': cur_farming[1], 'followers': cur_farming[2], 'following': cur_farming[3], 'date': str(datetime.date(datetime.now())), 'farmed': False})
             user['farm_ind'] += 1
+            html = ig_bot.driver.page_source
+            if check_keywords(html, ['действие заблокировано', 'попробуйте еще раз позже', 'сообщите нам, если вы считаете, что произошла ошибка', 'action blocked', 'this action was blocked']):
+                return False
+
 
     while operation[1] > 0:
         operation[1] -= 1
@@ -426,9 +442,14 @@ def process_one_farm_operation(ig_bot, username, operation):
         else:
             ig_bot.natural_unsubscribe(user['temp_bad_guys'][user['temp_bad_guys_ind']])
             user['temp_bad_guys_ind'] += 1
+            html = ig_bot.driver.page_source
+            if check_keywords(html, ['действие заблокировано', 'попробуйте еще раз позже', 'сообщите нам, если вы считаете, что произошла ошибка', 'action blocked', 'this action was blocked']):
+                return False
     save_user_to_json(user)
     if not ONE_USER:
         ig_bot.exit()
+
+    return True
 
 
 def find_bad(username):
