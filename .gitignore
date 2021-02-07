@@ -1,5 +1,4 @@
 /people_followers
-config.py
 /users
 /proxyauth_plugin
 chromedriver.exe
@@ -7,7 +6,4 @@ chromedriver.exe
 /ff_calc
 /.vscode
 /instaloader/__pycache__
-/ruins
-/nomads
-/paladins
-/debug.log
+/venv

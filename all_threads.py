@@ -74,9 +74,9 @@ if __name__ == '__main__':
         thread = Thread(target=nomads_work, args=(nomad['username'], nomad['password'], nomad['proxy']))
         threads.append(thread)
 
-    # for paladin_id, paladin in enumerate(PALADINS):
-    #     thread = Thread(target=paladins_work, args=(paladin_id, paladin['proxy']))
-    #     threads.append(thread)
+    for paladin_id, paladin in enumerate(PALADINS):
+        thread = Thread(target=paladins_work, args=(paladin_id, paladin['proxy']))
+        threads.append(thread)
 
     for i in range(len(threads)):
         threads[i].start()

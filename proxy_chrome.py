@@ -102,9 +102,9 @@ def get_driver(proxy):
 
     co = Options()
     co.add_argument('--user-agent="{}"'.format(USER_AGENT))
-    # to disable geolocation in browser. maybe inst don't like this
-    # prefs = {"profile.default_content_setting_values.geolocation" :2}
-    # co.add_experimental_option("prefs",prefs)
+    # to disable geolocation in browser. maybe Instagram don't like this
+    # prefs = {'profile.default_content_setting_values.geolocation': 2}
+    # co.add_experimental_option('prefs',prefs)
     if VPS:
         co.add_argument('--no-sandbox')
     if VPS or USE_PROXY:
@@ -114,7 +114,7 @@ def get_driver(proxy):
         co.add_argument("--headless")
 
     if VPS:
-        driver = webdriver.Chrome(executable_path="./drivers/chromedriver", options=co)
+        driver = webdriver.Chrome(executable_path='./drivers/chromedriver', options=co)
     else:
         driver = webdriver.Chrome(chrome_options=co)
 
@@ -123,7 +123,7 @@ def get_driver(proxy):
 
 
 if __name__ == '__main__':
-    proxy = TEST_PROXY
-    driver = get_driver(proxy)
-    # driver.get('https://2ip.ru/privacy/')
-    driver.get('https://httpbin.org/ip')
+    pass
+    # proxy = {'host': 'example', 'port': 12345, 'username': 'example', 'password': 'example'}
+    # driver = get_driver(proxy)
+    # driver.get('https://httpbin.org/ip')

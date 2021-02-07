@@ -80,9 +80,9 @@ def add_good_bad_guys(username, good):
         user['good_bad_guys'].append(i)
     save_user_to_json(user)
 
-def get_bad_guys(username):
+def get_bad_guys(username, username_to_calc, password_to_calc):
     user = get_user_from_json(username)
-    view_bot = calc_bot.CalculusBot(username, user['password'])
+    view_bot = calc_bot.CalculusBot(username_to_calc, password_to_calc)
     a = view_bot.bad_guys(username)
     real_bad = []
     for i in a:
@@ -115,7 +115,7 @@ def full_restart(username):
     random.shuffle(user['followers'])
     save_user_to_json(user)
 
-def get_farm_stats(username, date_start='2000-01-01', date_end=str(datetime.date(datetime.now())), recalc=False, username_to_calc='', password_to_calc='', proxy=DEFAULT_PROXY):
+def get_farm_stats(username, date_start='2000-01-01', date_end=str(datetime.date(datetime.now())), recalc=False, username_to_calc='', password_to_calc=''):
     user = get_user_from_json(username)
     if username_to_calc == '':
         username_to_calc = username
@@ -123,7 +123,7 @@ def get_farm_stats(username, date_start='2000-01-01', date_end=str(datetime.date
     date_start = str_to_date(date_start)
     date_end = str_to_date(date_end)
     if recalc:
-        view_bot = calc_bot.CalculusBot(username_to_calc, password_to_calc, proxy)
+        view_bot = calc_bot.CalculusBot(username_to_calc, password_to_calc)
         user['followers'] = view_bot.followers_list(username)
     for i in user['full_used']:
         if i['username'] in user['followers']:
@@ -178,10 +178,3 @@ def get_farm_stats(username, date_start='2000-01-01', date_end=str(datetime.date
 
 if __name__ == '__main__':
     pass
-
-    # add_blacklist('bugabrows', ['danilkorolkov'])
-
-    # get_farm_stats('bugabrows', '2020-10-19', username_to_calc='', password_to_calc='', recalc=True, proxy={'host': '193.187.146.145', 'port': 8000, 'username': 'TMBmYc', 'password': 'Za5u2k'})
-    # add_good_bad_guys('nazarchansky', ['annuuuua_2', 'rudakoval', 'matnamate.space'])
-    # full_restart('melnikoff_oleg')
-    # full_restart('nazarchansky')

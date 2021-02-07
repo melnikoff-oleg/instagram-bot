@@ -257,6 +257,6 @@ if __name__ == '__main__':
     pass
     # ig_bot = InstagramBot(TEST_USERNAME, TEST_PASSWORD,  TEST_PROXY)
     # ig_bot.login()
-    # ig_bot.nav_user('melnikoff_oleg')
+    # ig_bot.nav_user('example')
     # ig_bot.exit()
     # ig_bot.driver.close()

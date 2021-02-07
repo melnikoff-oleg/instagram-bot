@@ -150,11 +150,11 @@ def process_find_people_block(instaloader_session, block, ruin_name):
                         cur_file.write(j + '\n')
                     cur_file.close()
                     print(follower + " collected by " +
-                            ruin_name + " it's " + str(cur_ind) + "/" + str(len(block['followers'])) + ' in current block for ' + block['username'] + 'user')
+                            ruin_name + " it's " + str(cur_ind) + "/" + str(len(block['followers'])) + ' in current block for ' + block['username'] + ' user')
                     ttl_new += 1
                 else:
                     print("private " + follower + " was not collected by " +
-                            ruin_name + " it's " + str(cur_ind) + "/" + str(len(block['followers'])) + ' in current block for ' + block['username'] + 'user')
+                            ruin_name + " it's " + str(cur_ind) + "/" + str(len(block['followers'])) + ' in current block for ' + block['username'] + ' user')
             else:
                 print('We will not calc followers of {} because he has more than 1100 followers, while finding people for {} client'.format(follower, block['username']))
         except instaloader.exceptions.ProfileNotExistsException:
@@ -328,13 +328,13 @@ def finish_calc_people(username, nomad_name):
 
 
 def push_client_in_farm(username):
-    start = [[2, 0], [3, 0], [5, 0], [6, 0], [7, 0], [8, 0], [9, 0], [10, 0], [10, 0], [10, 0], [10, 0], [10, 0], [10, 0]]
+    start = [[2, 0], [2, 0], [2, 0], [3, 0], [3, 0], [3, 0], [4, 0], [4, 0], [4, 0], [5, 0], [5, 0], [5, 0], [1, 0], [0, 0], [0, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0], [8, 0], [9, 0], [10, 0], [10, 0], [10, 0], [10, 0]]
     mid_block = [[-1, -1], [6, 4], [6, 4], [6, 4], [6, 4], [6, 4]]
     mid = []
     for i in range(14):
         mid = mid + mid_block
     mid = mid + [-1, -1]
-    end = [[0, 10] for i in range(10)]
+    end = [[0, 10] for i in range(15)]
     operations = start + mid + end
     if DEBUG:
         operations = [[1, 0], [1, 1], [0, 1]]
@@ -382,9 +382,9 @@ def one_loop_paladin_process(paladin_id, ig_bot):
         find_bad(username)
         cur_operation = operations.pop(0)
 
-    
+    one_user = len(json_farm_data) == 1
 
-    if not process_one_farm_operation(ig_bot, username, cur_operation):
+    if not process_one_farm_operation(ig_bot, username, cur_operation, one_user):
         client['last_operation'] = int(time.time()) + CLIENT_SLEEP_AFTER_BLOCKING
         print('FUCKING SHIT CLIENT {} BLOCKED:)'.format(username))
         print('Now we will set last_operation time on client {} to current time + {} secs'.format(username, CLIENT_SLEEP_AFTER_BLOCKING))
@@ -392,8 +392,6 @@ def one_loop_paladin_process(paladin_id, ig_bot):
         client['last_operation'] = int(time.time())
     operations_len = len(operations)
     if operations_len == 0:
-        print('YEEEEEEEZZZZZZZZZZ')
-        print('YEEEEEEEZZZZZZZZZZ')
         print('YEEEEEEEZZZZZZZZZZ')
         print('Finally finished farm on {client_name} !!!'.format(client_name=username))
         json_farm_data.pop(argmin)
@@ -419,7 +417,7 @@ def check_keywords(html, keywords):
 
 
     
-def process_one_farm_operation(ig_bot, username, operation):
+def process_one_farm_operation(ig_bot, username, operation, one_user):
     user = get_user_from_json(username)
     ig_bot.username = user['username']
     ig_bot.password = user['password']
@@ -452,7 +450,7 @@ def process_one_farm_operation(ig_bot, username, operation):
             if check_keywords(html, ['действие заблокировано', 'попробуйте еще раз позже', 'сообщите нам, если вы считаете, что произошла ошибка', 'action blocked', 'this action was blocked']):
                 return False
     save_user_to_json(user)
-    if not ONE_USER:
+    if not one_user:
         ig_bot.exit()
 
     return True
@@ -476,18 +474,5 @@ def find_bad(username):
 
 
 if __name__ == '__main__':
+    # create_user_json(username, password)
     pass
-    # username = TEST_USERNAME
-    # password = TEST_PASSWORD
-
-    # find_people(username)
-    # finish_find_people(username)
-    # finish_calc_people(username, password)
-
-    # user = get_user_from_json(username)
-    # ans = []
-    # for i in range(200):
-    #     print(user['most_common'][i][0])
-
-    # find_people('melnikoff_oleg')
-    # find_people('nazarchansky')
